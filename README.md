@@ -1,6 +1,10 @@
 # Big-O Run & Plot
 > Library that helps to run Big-O Experiments and plot the output
 
+[![Go Report Card](https://goreportcard.com/badge/github.com/Oppodelldog/bigo)](https://goreportcard.com/report/github.com/Oppodelldog/bigo)
+[![godoc](https://img.shields.io/badge/godoc-reference-5272B4.svg)](https://godoc.org/github.com/Oppodelldog/bigo)
+[![License](https://img.shields.io/github/license/mashape/apistatus.svg)](https://raw.githubusercontent.com/Oppodelldog/bigo/master/LICENSE)
+
 ## Example comparing two variants
 [examples/ex1/main.go](examples/ex1/main.go)
 ```go
