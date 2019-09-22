@@ -9,8 +9,8 @@ import (
 func main() {
 	seriesList := bigo.PlotSeriesList{}
 	for testName, testRunner := range map[string]Runner{
-		"VariantA": {Sleep: 100},
-		"VariantB": {Sleep: 200},
+		"VariantA": {Sleep: 100, Factor: 1},
+		"VariantB": {Sleep: 200, Factor: 2},
 	} {
 		seriesList = append(seriesList, bigo.PlotSeries{Name: testName, Results: bigo.
 			New(
@@ -20,28 +20,26 @@ func main() {
 			).
 			Run().GetResults(),
 		})
-
 	}
 
-	plotConfig := bigo.DefaultPlotConfig
-	plotConfig.ReferencePlots = true
-
 	// plot the collected result data and create one plot out of the data
-	bigo.PlotTestResultsWithConfig("A/B", seriesList, plotConfig)
-
+	bigo.PlotTestResults("A/B", seriesList)
 }
 
 // Runner implements TestRunner
 type Runner struct {
-	Sleep int
+	Sleep  int
+	Factor int
 }
 
-// Step simulated to test some logic. For simplicity it simply waits N*r.Sleep milliseconds.
+// Step simulated 3 additional scales to the given N. In this case
 func (r Runner) Step(n float64) bigo.OMeasures {
-	timeStart := time.Now()
+	var measures bigo.OMeasures
+	for i := 1; i <= 3; i++ {
+		timeStart := time.Now()
+		time.Sleep(time.Millisecond * time.Duration(r.Sleep) * time.Duration(n) * time.Duration(i*r.Factor))
+		measures = append(measures, bigo.OMeasure{O: float64(time.Since(timeStart).Milliseconds())})
+	}
 
-	// TODO: put your code under test here
-	time.Sleep(time.Millisecond * time.Duration(r.Sleep) * time.Duration(n))
-
-	return bigo.OMeasures{{O: float64(time.Since(timeStart).Milliseconds())}}
+	return measures
 }

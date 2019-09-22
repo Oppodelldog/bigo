@@ -82,3 +82,39 @@ func (r Runner) Step(n float64) bigo.OMeasures {
  Variant A           |  Variant B
 :-------------------------:|:-------------------------:
 ![](examples/ex2/VariantA.png)  |  ![](examples/ex2/VariantB.png)
+
+
+## Example combining multiple Results in one plot
+
+To combine mutliple capture results in one plot you have to collect
+the Results into a **bigo.PlotSeriesList**, which then can be passed
+to **bigo.PlotTestResults** to generate one plot file.
+
+**Here's a sample**
+[examples/ex3/main.go](examples/ex3/main.go)
+
+ ```go
+func main() {
+	seriesList := bigo.PlotSeriesList{}
+	for testName, testRunner := range map[string]Runner{
+		"VariantA": {Sleep: 100, Factor: 1},
+		"VariantB": {Sleep: 200, Factor: 2},
+	} {
+		seriesList = append(seriesList, bigo.PlotSeries{Name: testName, Results: bigo.
+			New(
+				testName,
+				testRunner,
+				bigo.NewArrayStepper([]float64{1, 2, 3}),
+			).
+			Run().GetResults(),
+		})
+	}
+
+	// plot the collected result data and create one plot out of the data
+	bigo.PlotTestResults("A/B", seriesList)
+}
+ ```
+ 
+ Combinaed Plot          | 
+:-------------------------:|
+![](examples/ex3/AB.png)|
