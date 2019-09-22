@@ -19,7 +19,7 @@ type rangeStepper struct {
 }
 
 func (i *rangeStepper) Next() (float64, bool) {
-	if i.current >= i.max {
+	if i.current > i.max {
 		return 0, false
 	}
 	value := i.current
