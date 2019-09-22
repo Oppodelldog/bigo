@@ -124,33 +124,14 @@ func addReferencePlots(minN float64, maxN float64, minO float64, maxO float64, p
 	quad.Color = color.RGBA{B: 0, G: 0, A: 60}
 	quad.Width = 1
 
-	exp := plotter.NewFunction(scaledFunction(minN, maxN, minO, maxO, func(x float64) float64 { return math.Pow(2, x) }))
-	exp.Color = color.RGBA{B: 0, G: 0, A: 60}
-	exp.Width = 1
-
-	log := plotter.NewFunction(scaledFunction(minN, maxN, minO, maxO, func(x float64) float64 {
-		return logLimited(x)
-	}))
+	log := plotter.NewFunction(scaledFunction(minN, maxN, minO, maxO, func(x float64) float64 { return logLimited(x) }))
 	log.Color = color.RGBA{B: 0, G: 0, A: 60}
 	log.Width = 1
 
-	log2 := plotter.NewFunction(scaledFunction(minN, maxN, minO, maxO, func(x float64) float64 {
-		return logLimited(logLimited(x))
-	}))
-	log2.Color = color.RGBA{B: 0, G: 0, A: 60}
-	log2.Width = 1
-
-	lin := plotter.NewFunction(scaledFunction(minN, maxN, minO, maxO, func(x float64) float64 { return x }))
-	lin.Color = color.RGBA{B: 0, G: 0, A: 60}
-	lin.Width = 1
-
-	p.Add(quad, exp, log, log2, lin)
+	p.Add(quad, log)
 
 	p.Legend.Add("x^2", quad)
-	p.Legend.Add("2^x", exp)
-	p.Legend.Add("linear", lin)
 	p.Legend.Add("log x", log)
-	p.Legend.Add("log log x", log2)
 }
 
 func scaledFunction(minN, maxN, minO, maxO float64, f func(x float64) float64) func(x float64) float64 {
