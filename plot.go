@@ -18,11 +18,19 @@ type PlotSeries struct {
 }
 
 type PlotConfig struct {
-	ReferencePlots bool
+	ReferencePlots       bool
+	PlotWidth            vg.Length
+	PlotHeight           vg.Length
+	LegendThumbNailWidth vg.Length
 }
 
 func PlotTestResults(plotSeries PlotSeries) {
-	PlotTestResultsWithConfig(plotSeries, PlotConfig{})
+	PlotTestResultsWithConfig(plotSeries, PlotConfig{
+		ReferencePlots:       false,
+		PlotWidth:            6 * vg.Inch,
+		PlotHeight:           6 * vg.Inch,
+		LegendThumbNailWidth: 0.5 * vg.Inch,
+	})
 }
 
 // PlotTestResults plots the given results to a file prefixed with the given name
@@ -69,9 +77,9 @@ func PlotTestResultsWithConfig(plotSeries PlotSeries, plotConfig PlotConfig) {
 		addReferencePlots(minN, maxN, minO, maxO, p)
 	}
 
-	p.Legend.ThumbnailWidth = 0.5 * vg.Inch
+	p.Legend.ThumbnailWidth = plotConfig.LegendThumbNailWidth
 
-	if err := p.Save(6*vg.Inch, 6*vg.Inch, fmt.Sprintf("%s.png", plotSeries.Name)); err != nil {
+	if err := p.Save(plotConfig.PlotWidth, plotConfig.PlotHeight, fmt.Sprintf("%s.png", plotSeries.Name)); err != nil {
 		panic(err)
 	}
 }
