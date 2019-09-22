@@ -8,6 +8,7 @@ package main
 
 import (
 	"time"
+
 	"github.com/Oppodelldog/bigo"
 )
 
@@ -23,8 +24,8 @@ func main() {
 				bigo.NewArrayStepper([]float64{1, 2, 3}),
 			).
 			Run().
-			WriteResultsToJsonFile().
-			PlotResultsToFile()
+			WriteResultsToJson().
+			PlotResults()
 	}
 }
 
@@ -42,7 +43,6 @@ func (r Runner) Step(n float64) bigo.OMeasures {
 
 	return bigo.OMeasures{{O: float64(time.Since(timeStart).Milliseconds())}}
 }
-
 ```
 
 Variant A           |  Variant B
@@ -61,7 +61,7 @@ The plot the will reflect that in **min, max, mean, all**
 [examples/ex2/main.go](examples/ex2/main.go)
 
  ```go
-// Step simulated 3 additional scales to the given N. In this case 
+// Step simulated 3 additional scales to the given N. In this case
 func (r Runner) Step(n float64) bigo.OMeasures {
 	var measures bigo.OMeasures
 	for i := 1; i <= 3; i++ {
@@ -72,6 +72,7 @@ func (r Runner) Step(n float64) bigo.OMeasures {
 
 	return measures
 }
+
  ```
  
  Variant A           |  Variant B
