@@ -1,6 +1,7 @@
 package main
 
 import (
+	"gonum.org/v1/plot/vg"
 	"time"
 
 	"github.com/Oppodelldog/bigo"
@@ -22,8 +23,11 @@ func main() {
 		})
 	}
 
+	plotConfig := bigo.DefaultPlotConfig
+	plotConfig.PlotHeight = 8 * vg.Inch
+	plotConfig.PlotWidth = 8 * vg.Inch
 	// plot the collected result data and create one plot out of the data
-	bigo.PlotTestResults("A/B", seriesList)
+	bigo.PlotTestResultsWithConfig("A/B", seriesList, plotConfig)
 }
 
 // Runner implements TestRunner

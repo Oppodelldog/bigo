@@ -115,6 +115,6 @@ func main() {
 }
  ```
  
- Combinaed Plot          | 
+ Combined Plot          | 
 :-------------------------:|
 ![](examples/ex3/AB.png)|
