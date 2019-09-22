@@ -2,7 +2,6 @@ package bigo
 
 import (
 	"encoding/json"
-	"fmt"
 	"io/ioutil"
 )
 
@@ -10,6 +9,7 @@ import (
 func WriteResultsToJsonFile(name string, results Results) {
 	j, err := json.Marshal(results)
 	panicOnError(err)
-	err = ioutil.WriteFile(fmt.Sprintf("%s.json", name), j, 0655)
+
+	err = ioutil.WriteFile(normalizeFileName(name, "json"), j, 0655)
 	panicOnError(err)
 }

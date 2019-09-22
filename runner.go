@@ -61,14 +61,18 @@ func (r *BigO) WriteResultsToJson() *BigO {
 
 // PlotResults plots a graph from the captured results to a png file.
 func (r *BigO) PlotResults() *BigO {
-	PlotTestResults(PlotSeries{Name: r.Name, Results: r.Results})
+	PlotTestResults(r.Name, PlotSeriesList{PlotSeries{Name: r.Name, Results: r.Results}})
 
 	return r
 }
 
 // PlotResultsWithConfig plots a graph from the captured results to a png file.
 func (r *BigO) PlotResultsWithConfig(plotConfig PlotConfig) *BigO {
-	PlotTestResultsWithConfig(PlotSeries{Name: r.Name, Results: r.Results}, plotConfig)
-
+	PlotTestResultsWithConfig(r.Name, PlotSeriesList{PlotSeries{Name: r.Name, Results: r.Results}}, plotConfig)
 	return r
+}
+
+// GetResults returns captured results
+func (r *BigO) GetResults() Results {
+	return r.Results
 }
