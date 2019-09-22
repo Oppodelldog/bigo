@@ -17,6 +17,13 @@ type PlotSeries struct {
 	Results Results
 }
 
+var DefaultPlotConfig = PlotConfig{
+	ReferencePlots:       false,
+	PlotWidth:            6 * vg.Inch,
+	PlotHeight:           6 * vg.Inch,
+	LegendThumbNailWidth: 0.5 * vg.Inch,
+}
+
 type PlotConfig struct {
 	ReferencePlots       bool
 	PlotWidth            vg.Length
@@ -26,12 +33,7 @@ type PlotConfig struct {
 
 // PlotTestResults plots the given results to a file prefixed with the given name
 func PlotTestResults(plotSeries PlotSeries) {
-	PlotTestResultsWithConfig(plotSeries, PlotConfig{
-		ReferencePlots:       false,
-		PlotWidth:            6 * vg.Inch,
-		PlotHeight:           6 * vg.Inch,
-		LegendThumbNailWidth: 0.5 * vg.Inch,
-	})
+	PlotTestResultsWithConfig(plotSeries, DefaultPlotConfig)
 }
 
 // PlotTestResultsWithConfig allows to plot with custom configuration
