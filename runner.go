@@ -52,16 +52,23 @@ func (r *BigO) Run() *BigO {
 	return r
 }
 
-// WriteResultsToJsonFile writes the captured results to a json file.
-func (r *BigO) WriteResultsToJsonFile() *BigO {
+// WriteResultsToJson writes the captured results to a json file.
+func (r *BigO) WriteResultsToJson() *BigO {
 	WriteResultsToJsonFile(r.Name, r.Results)
 
 	return r
 }
 
-// PlotResultsToFile plots a graph from the captured results to a png file.
-func (r *BigO) PlotResultsToFile() *BigO {
+// PlotResults plots a graph from the captured results to a png file.
+func (r *BigO) PlotResults() *BigO {
 	PlotTestResults(PlotSeries{Name: r.Name, Results: r.Results})
+
+	return r
+}
+
+// PlotResultsWithConfig plots a graph from the captured results to a png file.
+func (r *BigO) PlotResultsWithConfig(plotConfig PlotConfig) *BigO {
+	PlotTestResultsWithConfig(PlotSeries{Name: r.Name, Results: r.Results}, plotConfig)
 
 	return r
 }

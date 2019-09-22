@@ -12,7 +12,7 @@ install-golangci-lint: ensure-bin
 
 lint: ## run all the linters
 	golangci-lint help linters
-	golangci-lint run --enable=goimports --enable=gofmt --enable=gocyclo --enable=nakedret --enable=scopelint --enable=stylecheck
+	golangci-lint run --enable=staticcheck --enable=govet --enable=interfacer --enable=scopelint --enable=misspell --enable=depguard --enable=dupl --enable=goimports --enable=gofmt --enable=gocyclo --enable=nakedret --enable=scopelint --enable=stylecheck --disable=typecheck
 	
 tests: ## run all the tests
 	go version

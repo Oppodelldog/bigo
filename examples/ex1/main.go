@@ -18,8 +18,8 @@ func main() {
 				bigo.NewArrayStepper([]float64{1, 2, 3}),
 			).
 			Run().
-			WriteResultsToJsonFile().
-			PlotResultsToFile()
+			WriteResultsToJson().
+			PlotResults()
 	}
 }
 
