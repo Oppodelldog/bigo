@@ -8,7 +8,7 @@ type Stepper interface {
 
 // NewRangeStepper returns a Stepper that steps from min to max incremented by stepSize
 func NewRangeStepper(min, max, stepSize float64) *rangeStepper {
-	return &rangeStepper{min: min, max: max, stepSize: stepSize, current: min}
+	return &rangeStepper{max: max, stepSize: stepSize, current: min}
 }
 
 type rangeStepper struct {
@@ -19,13 +19,14 @@ type rangeStepper struct {
 }
 
 func (i *rangeStepper) Next() (float64, bool) {
-	var next = i.current + i.stepSize
-	if next > i.max {
+	if i.current >= i.max {
 		return 0, false
 	}
-	i.current = next
+	value := i.current
 
-	return i.current, true
+	i.current++
+
+	return value, true
 }
 
 // NewRangeStepper returns a Stepper that steps from the beginning to the end of the provided array.
