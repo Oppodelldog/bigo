@@ -24,6 +24,7 @@ type PlotConfig struct {
 	LegendThumbNailWidth vg.Length
 }
 
+// PlotTestResults plots the given results to a file prefixed with the given name
 func PlotTestResults(plotSeries PlotSeries) {
 	PlotTestResultsWithConfig(plotSeries, PlotConfig{
 		ReferencePlots:       false,
@@ -33,7 +34,7 @@ func PlotTestResults(plotSeries PlotSeries) {
 	})
 }
 
-// PlotTestResults plots the given results to a file prefixed with the given name
+// PlotTestResultsWithConfig allows to plot with custom configuration
 func PlotTestResultsWithConfig(plotSeries PlotSeries, plotConfig PlotConfig) {
 	p, err := plot.New()
 	if err != nil {
