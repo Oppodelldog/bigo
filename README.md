@@ -43,3 +43,7 @@ func (r Runner) Step(n float64) bigo.OMeasures {
 }
 
 ```
+
+Plot Variant A           |  Plot Variant B
+:-------------------------:|:-------------------------:
+![](examples/ex1/VariantA.png)  |  ![](examples/ex1/VariantB.png)
