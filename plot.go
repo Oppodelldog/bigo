@@ -2,6 +2,7 @@ package bigo
 
 import (
 	"fmt"
+	"gonum.org/v1/plot/vg/draw"
 	"image/color"
 	"math"
 
@@ -87,7 +88,7 @@ func PlotTestResultsWithConfig(name string, plotSeries PlotSeriesList, plotConfi
 		panicOnError(err)
 		lMean, err := plotter.NewLine(ptsMean)
 		panicOnError(err)
-		lAll, err := plotter.NewLine(all)
+		lAll, err := plotter.NewScatter(all)
 		panicOnError(err)
 
 		lMin.Color = c
@@ -97,7 +98,8 @@ func PlotTestResultsWithConfig(name string, plotSeries PlotSeriesList, plotConfi
 		lMean.Color = c
 		lMean.Dashes = []vg.Length{vg.Points(0.5), vg.Points(0.5)}
 		lAll.Color = c
-		lAll.Dashes = []vg.Length{vg.Points(1), vg.Points(1)}
+		lAll.Shape = draw.PlusGlyph{}
+		lAll.Radius = vg.Length(5)
 
 		p.Add(lMin, lMax, lMean, lAll)
 		p.Legend.Add(fmt.Sprintf("%s min", seriesName), lMin)
