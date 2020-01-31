@@ -2,9 +2,10 @@ package bigo
 
 import (
 	"fmt"
-	"gonum.org/v1/plot/vg/draw"
 	"image/color"
 	"math"
+
+	"gonum.org/v1/plot/vg/draw"
 
 	"github.com/montanaflynn/stats"
 	"gonum.org/v1/plot"
