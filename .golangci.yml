@@ -1,0 +1,23 @@
+# https://github.com/golangci/golangci-lint#config-file
+
+issues:
+  exclude:
+    - Using the variable on range scope .* in function literal
+
+  exclude-rules:
+    - path: _test\.go
+      text: .*do not define dynamic errors.*
+
+linters:
+  presets:
+    - bugs
+    - complexity
+    - format
+    - performance
+    - style
+    - unused
+  disable:
+    - typecheck
+    - gochecknoglobals
+    - testpackage
+  fast: false

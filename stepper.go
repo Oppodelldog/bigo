@@ -6,22 +6,22 @@ type Stepper interface {
 	Next() (float64, bool)
 }
 
-// NewRangeStepper returns a Stepper that steps from min to max incremented by stepSize
-func NewRangeStepper(min, max, stepSize float64) *rangeStepper {
-	return &rangeStepper{max: max, stepSize: stepSize, current: min}
+// NewRangeStepper returns a Stepper that steps from min to max incremented by stepSize.
+func NewRangeStepper(min, max, stepSize float64) *RangeStepper {
+	return &RangeStepper{max: max, stepSize: stepSize, current: min}
 }
 
-type rangeStepper struct {
-	min      float64
+type RangeStepper struct {
 	max      float64
 	stepSize float64
 	current  float64
 }
 
-func (i *rangeStepper) Next() (float64, bool) {
+func (i *RangeStepper) Next() (float64, bool) {
 	if i.current > i.max {
 		return 0, false
 	}
+
 	value := i.current
 
 	i.current++
@@ -30,20 +30,23 @@ func (i *rangeStepper) Next() (float64, bool) {
 }
 
 // NewRangeStepper returns a Stepper that steps from the beginning to the end of the provided array.
-func NewArrayStepper(steps []float64) *arrayStepper {
-	return &arrayStepper{steps: steps}
+func NewArrayStepper(steps []float64) *ArrayStepper {
+	return &ArrayStepper{steps: steps}
 }
 
-type arrayStepper struct {
+type ArrayStepper struct {
 	steps   []float64
 	current int
 }
 
-func (a *arrayStepper) Next() (float64, bool) {
+func (a *ArrayStepper) Next() (float64, bool) {
 	if a.current >= len(a.steps) {
 		return 0, false
 	}
+
 	var value = a.steps[a.current]
+
 	a.current++
+
 	return value, true
 }

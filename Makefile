@@ -2,7 +2,11 @@ export PROJECTS_ROOT := $(abspath $(shell pwd)/../)
 
 ensure-bin:
 	[ -d .bin ] || mkdir .bin
-	
+
+setup: ensure-bin ## Install tools
+	curl -sfL https://install.goreleaser.com/github.com/golangci/golangci-lint.sh | bash -s v1.27.0
+	mv bin/golangci-lint .bin/golangci-lint && rm -rf bin
+
 install-tools: install-golangci-lint ## install tools
 
 install-golangci-lint: ensure-bin 
@@ -10,10 +14,9 @@ install-golangci-lint: ensure-bin
 	curl -sfL https://install.goreleaser.com/github.com/golangci/golangci-lint.sh | bash -s v1.17.1  && \
 	mv bin/golangci-lint golangci-lint && rm -rf bin
 
-lint: ## run all the linters
-	golangci-lint help linters
-	golangci-lint run --enable=staticcheck --enable=govet --enable=interfacer --enable=scopelint --enable=misspell --enable=depguard --enable=dupl --enable=goimports --enable=gofmt --enable=gocyclo --enable=nakedret --enable=scopelint --enable=stylecheck --disable=typecheck
-	
+lint: ## Run the linters
+	golangci-lint run
+
 tests: ## run all the tests
 	go version
 	go env

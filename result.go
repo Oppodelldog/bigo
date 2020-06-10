@@ -1,6 +1,6 @@
 package bigo
 
-// OMeasure is a single capture of the O value
+// OMeasure is a single capture of the O value.
 type OMeasure struct {
 	// ResultValue may be used to store result values of the tested logic.
 	// It is not used by this library, it's intention is debugging:
@@ -12,14 +12,14 @@ type OMeasure struct {
 	O float64 `json:"O"`
 }
 
-// OMeasures contains multiple instances of OMeasure
+// OMeasures contains multiple instances of OMeasure.
 type OMeasures []OMeasure
 
-// Result is used by the library to accumulate OMeasure results per N
+// Result is used by the library to accumulate OMeasure results per N.
 type Result struct {
 	N         float64   `json:"N"`
 	OMeasures OMeasures `json:"M"`
 }
 
-// Results contains multiple instances of Result
+// Results contains multiple instances of Result.
 type Results []Result

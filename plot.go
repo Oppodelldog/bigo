@@ -13,24 +13,28 @@ import (
 	"gonum.org/v1/plot/vg"
 )
 
-// PlotSeriesList a list PlotSeries
+// PlotSeriesList a list PlotSeries.
 type PlotSeriesList []PlotSeries
 
-// PlotSeries a list of result values assigned to a name
+// PlotSeries a list of result values assigned to a name.
 type PlotSeries struct {
 	Name    string
 	Results Results
 }
 
-// DefaultPlotConfig is used when calling PlotTestResults
+const defaultPlotWidth = 6
+const defaultPlotHeight = 6
+const legendThumbnailWidth = 0.5
+
+// DefaultPlotConfig is used when calling PlotTestResults.
 var DefaultPlotConfig = PlotConfig{
 	ReferencePlots:       false,
-	PlotWidth:            6 * vg.Inch,
-	PlotHeight:           6 * vg.Inch,
-	LegendThumbNailWidth: 0.5 * vg.Inch,
+	PlotWidth:            defaultPlotWidth * vg.Inch,
+	PlotHeight:           defaultPlotHeight * vg.Inch,
+	LegendThumbNailWidth: legendThumbnailWidth * vg.Inch,
 }
 
-// PlotConfig enables to configure the plot
+// PlotConfig enables to configure the plot.
 type PlotConfig struct {
 	ReferencePlots       bool
 	PlotWidth            vg.Length
@@ -38,32 +42,44 @@ type PlotConfig struct {
 	LegendThumbNailWidth vg.Length
 }
 
-// PlotTestResults plots the given results to a file prefixed with the given name
+// PlotTestResults plots the given results to a file prefixed with the given name.
 func PlotTestResults(name string, plotSeries PlotSeriesList) {
 	PlotTestResultsWithConfig(name, plotSeries, DefaultPlotConfig)
 }
 
-// PlotTestResultsWithConfig allows to plot with custom configuration
+// PlotTestResultsWithConfig allows to plot with custom configuration.
+//nolint:funlen
 func PlotTestResultsWithConfig(name string, plotSeries PlotSeriesList, plotConfig PlotConfig) {
 	p, err := plot.New()
 	if err != nil {
 		panic(err)
 	}
+
 	p.Title.Text = name
 	p.X.Label.Text = "N"
 	p.Y.Label.Text = "O"
 
 	pal := newPalette()
-	var maxO, minO = 0.0, math.MaxFloat64
-	var maxN, minN = 0.0, math.MaxFloat64
+
+	var (
+		maxO, minO = 0.0, math.MaxFloat64
+		maxN, minN = 0.0, math.MaxFloat64
+	)
+
 	for _, series := range plotSeries {
 		c := pal.Next()
 		seriesName := series.Name
-		var O stats.Float64Data
-		var ptsMin, ptsMax, ptsMean, all plotter.XYs
+
+		var (
+			O                            stats.Float64Data
+			ptsMin, ptsMax, ptsMean, all plotter.XYs
+		)
+
 		for _, results := range series.Results {
 			var max, min, mean float64
+
 			n := results.N
+
 			for _, result := range results.OMeasures {
 				all = append(all, plotter.XY{X: n, Y: result.O})
 				O = append(O, result.O)
@@ -74,6 +90,7 @@ func PlotTestResultsWithConfig(name string, plotSeries PlotSeriesList, plotConfi
 				min, err = stats.Min(O)
 				panicOnError(err)
 			}
+
 			ptsMin = append(ptsMin, plotter.XY{X: n, Y: min})
 			ptsMax = append(ptsMax, plotter.XY{X: n, Y: max})
 			ptsMean = append(ptsMean, plotter.XY{X: n, Y: mean})
@@ -83,6 +100,7 @@ func PlotTestResultsWithConfig(name string, plotSeries PlotSeriesList, plotConfi
 			maxN = math.Max(maxN, n)
 			O = stats.Float64Data{}
 		}
+
 		lMin, err := plotter.NewLine(ptsMin)
 		panicOnError(err)
 		lMax, err := plotter.NewLine(ptsMax)
@@ -93,14 +111,14 @@ func PlotTestResultsWithConfig(name string, plotSeries PlotSeriesList, plotConfi
 		panicOnError(err)
 
 		lMin.Color = c
-		lMin.Dashes = []vg.Length{vg.Points(2), vg.Points(2)}
+		lMin.Dashes = []vg.Length{vg.Points(2), vg.Points(2)} //nolint:gomnd
 		lMax.Color = c
-		lMax.Dashes = []vg.Length{vg.Points(2), vg.Points(2)}
+		lMax.Dashes = []vg.Length{vg.Points(2), vg.Points(2)} //nolint:gomnd
 		lMean.Color = c
-		lMean.Dashes = []vg.Length{vg.Points(0.5), vg.Points(0.5)}
+		lMean.Dashes = []vg.Length{vg.Points(0.5), vg.Points(0.5)} //nolint:gomnd
 		lAll.Color = c
 		lAll.Shape = draw.PlusGlyph{}
-		lAll.Radius = vg.Length(5)
+		lAll.Radius = vg.Length(5) //nolint:gomnd
 
 		p.Add(lMin, lMax, lMean, lAll)
 		p.Legend.Add(fmt.Sprintf("%s min", seriesName), lMin)
@@ -122,13 +140,12 @@ func PlotTestResultsWithConfig(name string, plotSeries PlotSeriesList, plotConfi
 }
 
 func addReferencePlots(minN float64, maxN float64, minO float64, maxO float64, p *plot.Plot) {
-
 	quad := plotter.NewFunction(scaledFunction(minN, maxN, minO, maxO, func(x float64) float64 { return math.Pow(x, 2) }))
-	quad.Color = color.RGBA{B: 0, G: 0, A: 60}
+	quad.Color = color.RGBA{B: 0, G: 0, A: 60} //nolint:gomnd
 	quad.Width = 1
 
-	log := plotter.NewFunction(scaledFunction(minN, maxN, minO, maxO, func(x float64) float64 { return logLimited(x) }))
-	log.Color = color.RGBA{B: 0, G: 0, A: 60}
+	log := plotter.NewFunction(scaledFunction(minN, maxN, minO, maxO, logLimited))
+	log.Color = color.RGBA{B: 0, G: 0, A: 60} //nolint:gomnd
 	log.Width = 1
 
 	p.Add(quad, log)
@@ -142,20 +159,25 @@ func scaledFunction(minN, maxN, minO, maxO float64, f func(x float64) float64) f
 		xScaled := scaleX(minN, maxN, x)
 		xApplied := f(xScaled)
 		yScaled := scaleY(minO, maxO, xApplied)
+
 		return yScaled
 	}
 }
 
 func scaleX(minN, maxN, n float64) float64 {
-	n = n - minN
-	nPercent := 100 / (maxN / n)
-	scaledN := 100 / 100 * nPercent
+	const h = 100
+
+	n -= minN
+	nPercent := h / (maxN / n)
+	scaledN := h / (h * nPercent)
+
 	return scaledN
 }
 
 func scaleY(minO, maxO float64, n float64) float64 {
-	o := maxO / 100 * n
-	o = o + minO
+	o := maxO / (100 * n)
+	o += minO
+
 	return o
 }
 
@@ -164,6 +186,7 @@ func logLimited(x float64) float64 {
 	if l < 0 {
 		l = 0
 	}
+
 	return l
 }
 
@@ -175,8 +198,8 @@ func panicOnError(err error) {
 
 func newPalette() palette {
 	return palette{
+		//nolint:gomnd
 		colors: []color.RGBA{
-
 			{R: 211, G: 69, B: 0, A: 255},
 			{R: 50, G: 211, B: 50, A: 255},
 			{R: 0, G: 191, B: 211, A: 255},

@@ -1,0 +1,18 @@
+language: go
+
+go:
+  - 1.x
+
+os:
+  - linux
+  - windows
+
+env:
+  global:
+    - GO111MODULE=on
+    - GOFLAGS="-mod=readonly"
+    
+go_import_path: github.com/Oppodelldog/bigo
+
+script:
+  - go test -race -covermode=atomic  ./...

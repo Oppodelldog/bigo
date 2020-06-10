@@ -6,17 +6,17 @@ type TestRunner interface {
 	Step(n float64) OMeasures
 }
 
-// RunConfig gives detailed configuration to BigO
+// RunConfig gives detailed configuration to BigO.
 type RunConfig struct {
 	Speed float64
 }
 
-// New *BigO
+// New *BigO.
 func New(name string, testRunner TestRunner, stepper Stepper) *BigO {
 	return NewWithConfig(name, testRunner, stepper, RunConfig{Speed: 1})
 }
 
-// New *BigO with config
+// New *BigO with config.
 func NewWithConfig(name string, testRunner TestRunner, stepper Stepper, runConfig RunConfig) *BigO {
 	return &BigO{
 		Name:      name,
@@ -27,7 +27,7 @@ func NewWithConfig(name string, testRunner TestRunner, stepper Stepper, runConfi
 	}
 }
 
-// BigO holds values and methods to run tests
+// BigO holds values and methods to run tests.
 type BigO struct {
 	Name      string
 	Runner    TestRunner
@@ -43,18 +43,20 @@ func (r *BigO) Run() *BigO {
 		if !ok {
 			break
 		}
+
 		results := r.Runner.Step(n / r.RunConfig.Speed)
 		r.Results = append(r.Results, Result{
 			N:         n,
 			OMeasures: results,
 		})
 	}
+
 	return r
 }
 
-// WriteResultsToJson writes the captured results to a json file.
-func (r *BigO) WriteResultsToJson() *BigO {
-	WriteResultsToJsonFile(r.Name, r.Results)
+// WriteResultsToJSON writes the captured results to a json file.
+func (r *BigO) WriteResultsToJSON() *BigO {
+	WriteResultsToJSONFile(r.Name, r.Results)
 
 	return r
 }
@@ -72,7 +74,7 @@ func (r *BigO) PlotResultsWithConfig(plotConfig PlotConfig) *BigO {
 	return r
 }
 
-// GetResults returns captured results
+// GetResults returns captured results.
 func (r *BigO) GetResults() Results {
 	return r.Results
 }
