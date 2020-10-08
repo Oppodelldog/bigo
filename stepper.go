@@ -24,7 +24,7 @@ func (i *RangeStepper) Next() (float64, bool) {
 
 	value := i.current
 
-	i.current++
+	i.current += i.stepSize
 
 	return value, true
 }
