@@ -1,6 +1,6 @@
 module github.com/Oppodelldog/bigo
 
-go 1.14
+go 1.16
 
 require (
 	github.com/montanaflynn/stats v0.5.0
