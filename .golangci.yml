@@ -9,15 +9,30 @@ issues:
       text: .*do not define dynamic errors.*
 
 linters:
-  presets:
-    - bugs
-    - complexity
-    - format
-    - performance
-    - style
+  enable:
+    - govet
+    - gofmt
+    - goimports
+    - errcheck
+    - errorlint
+    - gosec
+    - nilerr
+    - noctx
+    - exportloopref
+    - staticcheck
+    - cyclop
+    - gocyclo
+    - funlen
+    - nestif
+    - goerr113
+    - gocritic
+    - bodyclose
+    - prealloc
+    - structcheck
+    - wsl
+    - makezero
+    - deadcode
+    - unparam
     - unused
-  disable:
-    - typecheck
-    - gochecknoglobals
-    - testpackage
+    - varcheck
   fast: false

@@ -50,10 +50,7 @@ func PlotTestResults(name string, plotSeries PlotSeriesList) {
 // PlotTestResultsWithConfig allows to plot with custom configuration.
 //nolint:funlen
 func PlotTestResultsWithConfig(name string, plotSeries PlotSeriesList, plotConfig PlotConfig) {
-	p, err := plot.New()
-	if err != nil {
-		panic(err)
-	}
+	p := plot.New()
 
 	p.Title.Text = name
 	p.X.Label.Text = "N"
@@ -83,12 +80,9 @@ func PlotTestResultsWithConfig(name string, plotSeries PlotSeriesList, plotConfi
 			for _, result := range results.OMeasures {
 				all = append(all, plotter.XY{X: n, Y: result.O})
 				O = append(O, result.O)
-				max, err = stats.Max(O)
-				panicOnError(err)
-				mean, err = stats.Mean(O)
-				panicOnError(err)
-				min, err = stats.Min(O)
-				panicOnError(err)
+				max = mustFloat64(stats.Max(O))
+				mean = mustFloat64(stats.Mean(O))
+				min = mustFloat64(stats.Min(O))
 			}
 
 			ptsMin = append(ptsMin, plotter.XY{X: n, Y: min})
@@ -137,6 +131,14 @@ func PlotTestResultsWithConfig(name string, plotSeries PlotSeriesList, plotConfi
 	if err := p.Save(plotConfig.PlotWidth, plotConfig.PlotHeight, normalizeFileName(name, "png")); err != nil {
 		panic(err)
 	}
+}
+
+func mustFloat64(v float64, err error) float64 {
+	if err != nil {
+		panic(err)
+	}
+
+	return v
 }
 
 func addReferencePlots(minN float64, maxN float64, minO float64, maxO float64, p *plot.Plot) {

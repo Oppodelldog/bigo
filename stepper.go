@@ -45,7 +45,7 @@ func (i *RangeStepper) Next() (float64, bool) {
 	return value, true
 }
 
-// NewRangeStepper returns a Stepper that steps from the beginning to the end of the provided array.
+// NewArrayStepper returns a Stepper that steps from the beginning to the end of the provided array.
 func NewArrayStepper(steps []float64) *ArrayStepper {
 	if len(steps) == 0 {
 		panic(ErrEmptyStepsArray)
